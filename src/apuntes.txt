@@ -1,0 +1,198 @@
+PASOS
+--------------------------------------------------------------------------------------------------------------
+BACKEND SETUP
+- Se creo la carpeta src (para backend)
+- En el archivo GestorTareas se ejecuto el comando "npm init -y" (para crear el archivo package.json)
+- En el archivo GestorTareas se ejecuto el comando "npm i express" (instalar dependencias express, se creo automaticamente node_modules)
+- Se creo el archivo app.js dentro de src y se hace una configuracion inical de servidor
+- Se ejecuta el server con el comando node app.js
+- Para eliminar el error:
+  Module type of file:///C:/Users/renzo/OneDrive/Desktop/GestorTareas/src/app.js is not specified and it doesn't parse as CommonJS.
+  Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+  Escribir en el archivo package.json: "type": "module",
+- crear la carpeta "routes" dentro de src para crear las urls del backend
+- Crear la carpeta "controllers" dentro de src para crear funciones cuando visitamos urls
+- crear la carpeta "models" para configurar los modelos de base de datos que usaremos
+- crear la carpeta middlewares
+- crear la carpeta schemas (para validacion)
+- crear la carpeta libs
+- crear en src los archivos config.js y db.js y index.js(arranque de la aplicacion)
+- opcional recomendacion: para no estar ejecutando manualmente el server cada vez que hacemos cambios
+                          hay una posible conifguracion al archivo package.json para que al hacer un cambio
+                          en el servidor(y guardarlo)se reinicie el server automaticamente(primero escribir el comando npm i nodemon -D).
+                          ANTES
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+                          DESPUES
+"scripts": {
+    "dev": "nodemon src/index.js"
+  },
+                          Luego de modificar el package.json usan el comando "npm run dev" para usar dicha funcionalidad
+                        PS C:\Users\renzo\OneDrive\Desktop\GestorTareas> npm run dev
+- Instalcion de un modulo para ver las peticiones que vienen del backend
+  PS C:\Users\renzo\OneDrive\Desktop\GestorTareas> npm install morgan
+  NOTA: cuando la terminal esta "bloqueda" mientras esta corriendo el server usar ctrl+c para "desbloquear"
+  Implementacion en app.js:
+  import express from 'express'
+  import morgan from 'morgan'
+  const app = express(); // Crear el servidor
+  app.use(morgan('dev'));
+  export default app;
+  Ejemplo: Tras recargar la pagina tres veces lo que aparace en consola
+  GET / 404 6.894 ms - 139
+  GET / 404 1.606 ms - 139
+  GET / 404 0.824 ms - 139
+----------------------------------------------------------------------------------------------------------------
+MONGO DB
+- Tras instalar mongo en la pc, traerlo al proyecto 
+  PS C:\Users\renzo\OneDrive\Desktop\GestorTareas> npm i mongoose (modulo para conenctarnos a mongo y tambien para modelar)
+- configurar la conexion a bd en index.js y app.js
+- creacion del model usuario
+------------------------------------------------------------------------------------------------------------------
+REGISTRO DE USUARIOS
+- creamos aut.routes.js para configura las rutas relacionadas a autenticacion
+- instalacion de la extension para vscode thunder client para ver el funcionamiento de codigo relacionado a peticiones
+- De primeras express no entiende las peticiones json, entonces para que pueda "entender" hace falta usar 
+  app.use(express.json()); al servidor app de tal manera que "convierta" los request en formato json    
+- instalacion de la extension mongoDB para ver el funcionamiento y manejo de la base de datos
+- Hasta el momento las respuestas mandan la contraseña no cifrada, se modifica esto en los sgtes pasos.
+----------------------------------------------------------------------------------------------------------
+CREACION DE TOKEN
+- instalar el modulo "npm i bcryptjs" para encriptar 
+- instalar el modulo jsonwebtoken "npm i jsonwebtoken"
+-  configuracion de jwt.js y config.js para incluir token para usuario
+-----------------------------------------------------------------------------------------------------------
+CREACION DE LOGIN
+-----------------------------------------------------------------------------------------------------------
+- ctlrl + D  esto atajo para seleccionar el resto de palabras identicas al de primera seleccion, por Ejemplo
+  borrar 3 palabras "casa" de un texto.
+- se creo la funcion "export const login" en auth.controller.js
+- al igual que en la parte de registro de usuario, cada vez que alguien se logea se crea un token diferente
+----------------------------------------------------------------------------------------------------------
+VALIDAR TOKEN
+- creamos validateToken.js en middlewares(funciones que se ejecutan antes de entrar a una ruta)
+- creamos la funcion intermedia authRequired para validacion y asi acceder a la informacion
+router.get('/api/profile', authRequired, profile);
+- insatalar cookie parser para leer correctamente las coookies que llegan desde el logeo 
+PS C:\Users\renzo\OneDrive\Desktop\GestorTareas> npm i cookie-parser
+-----------------------------------------------------------------------------------------------------------
+TASK CRUD
+- creamos tasks.routes.js
+- rutas CRUD y funciones
+router.get('/api/tasks', authRequired, getTasks); // todas las tareas
+//CRUD
+router.get('/api/tasks:/id', authRequired, getTask); // obtenet una tarea
+router.post('/api/tasks', authRequired, createTask); // para crear tareas
+router.delete('/api/tasks/:id', authRequired, deleteTask); // eliminar
+router.put('/api/tasks/:id', authRequired, updateTask); // editar
+
+-----------------------------------------------------------------------------------------------------------
+VALIDACION DE DATOS
+- instalacion de zod para la validadicion de datos
+PS C:\Users\renzo\OneDrive\Desktop\GestorTareas> npm i zod
+- creamos un middleware para las rutas de autenticacion y creacion de tareas en la cual se validar los Schemas resividos
+- se crean los Schemas modelos para la validacion: auth.Schemas.js y task.schemas.js 
+-----------------------------------------------------------------------------------------------------------
+FRONTEND: Configuracion del cliente (carpeta frontend)
+- Usaremos vite para tener una configuracion inicial para el frontend
+- Usamos el comando en la terminal "npm create vite" en el archivo raiz(GestorTareas) y luego insertamos el nombre del proyecto, en este caso "client"
+  Luego escogemos el tipo de framework, en este caso React
+  Luego la variante, en este caso "javascript"
+- Luego nos aparece el siguiente mensaje ne la terminal.
+Done. Now run:
+
+  cd client  
+  npm install
+  npm run dev
+- Significa que tendremos que ejecutar el backend y por otro terminal el frontend
+  PS C:\Users\renzo\OneDrive\Desktop\GestorTareas\client> npm run dev  (para el frontend)
+  PS C:\Users\renzo\OneDrive\Desktop\GestorTareas> npm run dev   (para el backend)
+- Luego de tener la condiguracion inicial del frontend dada por vite, vamos a configurarla a nuestras necesidades
+  - Para este ejemplo eliminamos el contenido dado por vite en la carpeta App.jsx y dejamos de momento:
+function App() {
+  return (
+    <div>
+      holaa
+    </div>
+  )
+}
+export default App
+  - Eliminamos el archivo App.css
+  - index.css lo dejamos vacio
+  - No hacemos cambios al resto de archivos de momento
+
+- Instalamos tailwindcss para estilos, ver la documento en la pagina web de la libreria para su instalacion usando React y vite
+  la forma de instalar y su uso cambia entre versiones
+
+- Crear paginas en react: instalar react router, ver documentacion en la pagina web, la instalacion cambia entre versiones
+- En el archivo App.jsx se crean unas rutas iniciales
+  function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/login" element={<h1>LOGEO</h1>} />
+        <Route path="/register" element={<h1>registrar</h1>} />
+        <Route path="/tasks" element={<h1>tareas</h1>} />
+        <Route path="/add-task" element={<h1>nueva tarea</h1>} />
+        <Route path="/tasks/:id" element={<h1>update task</h1>} />
+        <Route path="/profile" element={<h1>Profile</h1>} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+-----------------------------------------------------------------------------------------------------------
+REGISTRO DE USUARIO - frontend
+- creamos las carpetas pages, componentes y context
+- en la carpeta pages creamos una pagina de login y otra de registro
+-  usaremos la herramienta react hook form para la validacion proceso de datos en RegisterPage
+PS C:\Users\renzo\OneDrive\Desktop\GestorTareas\client> npm install react-hook-form
+   ver documentacion para la instalacion.
+   se configura la parte visual del formulario de REGISTRO
+- creamos la carpeta api para conectar la parte frontend con la parte backend en la cual desde el frontend se haran peticiones al backend
+  para ello instalamos axios
+  PS C:\Users\renzo\OneDrive\Desktop\GestorTareas\client> npm i axios
+
+- Para que la conexion de backend y frontend de diferente dominio sea exitosa debemos instalar el modulo cors y usarlo
+PS C:\Users\renzo\OneDrive\Desktop\GestorTareas> npm i cors
+-----------------------------------------------------------------------------------------------------------
+CONTEXTO DE USUARIO: Para mantener info de usuario mientras navegamos en la web, para guardar los datos de autenticacion
+- En la carpeta context creamos AuthContext.jsx
+- Se implemento el manejo de errores en el formulario de registro
+-----------------------------------------------------------------------------------------------------------
+FORMULARIO DE LOGIN
+- creamos el formulario correspondiente
+- Se implemento el manejo de errores en el formulario de login
+--------------------------------------------------------------------------------------------------------------
+RUTAS PROTEGIDAS
+
+// Creacion de RutaProtegida.jsx una instancia anterior a las rutas protegidas para la comprobar la autenticacion
+<Route element={<RutaProtegida/>}>
+            <Route path="/tasks" element={<TasksPage />} />
+            <Route path="/add-task" element={<TaskFormPage />} />
+            <Route path="/tasks/:id" element={<TaskFormPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
+
+//Para configurar las rutas protegidas y mantener las cookie entre rutas protegidas
+PS C:\Users\renzo\OneDrive\Desktop\GestorTareas\client> npm i js-cookie   
+
+// Creamos auth.js que sera un axios configurado que usaremos auth.js
+import axios from "axios";
+const instance = axios.create({
+    baseURL: 'http://localhost:4000/api',
+    withCredentials: true // necesario para mantener las credenciales
+})
+
+--------------------------------------------------------------------------------------------------------------
+TAREAS
+- Creacion del Formulario de agregar tarea, se uso react hook form(ya fue instalado al proyecto) TaskFormPage.jsx
+- Creacion de context para tareas, porque quiza vamos a tener otras paginas que van a querer usar estos datos
+- Conectar el context creado con el backend y con el page
+  Conexion backend(axios) ---> Context ----> page
+  Page ---> Context ---> Conexion backend(axios)
+--------------------------------------------------------------------------------------------------------------
+NAVBAR
+- barra de navegacion personalizada :D
+--------------------------------------------------------------------------------------------------------------
