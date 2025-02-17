@@ -52,9 +52,9 @@ function RegisterPage() {
                     {errors.username && (
                         <p className="text-red-500">Contraseña requerida</p>
                     )}
-                    <button type="submit" className="text-white font-bold">Registrar</button>
+                    <button type="submit" className="text-white bg-blue-800 px-4 py-1 rounded-sm">Registrar</button>
                 </form>
-                <p className="flex gap-x-2 justify-between text-gray-400">
+                <p className="flex gap-x-2 py-5 justify-between text-gray-400">
                     Ya tienes una cuenta? <Link to="/login" className="text-sky-500 ">Logearse</Link>
                 </p>
             </div>

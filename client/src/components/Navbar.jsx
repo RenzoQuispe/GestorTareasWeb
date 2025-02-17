@@ -7,21 +7,22 @@ export function Navbar() {
   console.log(isAuthenticated, user)
   
   return (
-    <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10 rounded-lg">
+    <nav className="bg-zinc-500 my-3 flex justify-between py-5 px-10 rounded-lg">
+      <Link to={ isAuthenticated ? "/tasks" : "/"}/>
       <h1 className="text-2xl font-bold">
-        <Link to={isAuthenticated ? "/taskss" : "/"}>Task Manager</Link>
+        <Link to={isAuthenticated ? "/tasks" : "/"}>Gestor de Tareas</Link>
       </h1>
-      <ul className="flex gap-x-2">
+      <ul className="flex gap-x-5">
         {isAuthenticated ? (
           <>
-            <li className="text-white">
-              Bienvenido {user.username} :D
+            <li className="text-2xl">
+              Bienvenido {user.username}
             </li>
             <li>
-              <Link to="/add-task" className="bg-indigo-500 px-4 py-1 rounded-sm">Añadir Tarea</Link>
+              <Link to="/add-task" className="bg-blue-800 px-4 py-1 rounded-sm text-white">Añadir Tarea</Link>
             </li>
             <li>
-              <Link to="/" className="bg-indigo-500 px-4 py-1 rounded-sm"  onClick={() => logout()}>
+              <Link to="/" className="bg-blue-800 px-4 py-1 rounded-sm text-white"  onClick={() => logout()}>
                 Logout
               </Link>
             </li>
@@ -29,10 +30,10 @@ export function Navbar() {
         ) : (
           <>
             <li>
-              <Link to="/login" className="bg-indigo-500 px-4 py-1 rounded-sm">Login</Link>
+              <Link to="/login" className="bg-blue-800 px-4 py-1 rounded-sm text-white">Login</Link>
             </li>
             <li>
-              <Link to="/register" className="bg-indigo-500 px-4 py-1 rounded-sm">Registrarse</Link>
+              <Link to="/register" className="bg-blue-800 px-4 py-1 rounded-sm text-white">Registrarse</Link>
             </li>
           </>
         )}

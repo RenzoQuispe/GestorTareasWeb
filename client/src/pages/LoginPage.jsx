@@ -44,9 +44,9 @@ function LoginPage() {
                     {errors.username && (
                         <p className="text-red-500">Contraseña requerida</p>
                     )}
-                    <button type="submit" className="text-white font-bold">Entrar</button>
+                    <button type="submit" className="text-white bg-blue-800 px-4 py-1 rounded-sm">Entrar</button>
                 </form>
-                <p className="flex gap-x-2 justify-between text-gray-400">
+                <p className="flex gap-x-2 py-5 justify-between text-gray-400">
                     No tienes una cuenta? <Link to="/register" className="text-sky-500 ">Sign Up </Link>
                 </p>
             </div>

@@ -26,7 +26,7 @@ export function TaskProvider({ children }) {
   const deleteTask = async (id) => {
     try {
       const res = await deleteTaskRequest(id);
-      if (res.status === 204) setTasks(tasks.filter((task) => task._id !== id));
+      if (res.status === 204) setTasks(tasks.filter((task) => task._id !== id)); //ACtualizar page tras eliminar 
     } catch (error) {
       console.log(error);
     }
@@ -44,6 +44,7 @@ export function TaskProvider({ children }) {
   const getTask = async (id) => {
     try {
       const res = await getTaskRequest(id);
+      console.log(res);
       return res.data;
     } catch (error) {
       console.error(error);
