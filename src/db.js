@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 export const connectDB = async() =>{
     try{
         await mongoose.connect('mongodb://localhost/merndb')
@@ -8,3 +7,18 @@ export const connectDB = async() =>{
         console.log(error);
     }
 }
+
+/*
+// Codigo usado para usar CosmosDB Azure
+export const connectDB = async () => {
+    try {
+        await mongoose.connect('      ', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        console.log("✅ Conectado a CosmosDB");
+    } catch (error) {
+        console.error("❌ Error al conectar a CosmosDB:", error);
+    }
+};
+*/

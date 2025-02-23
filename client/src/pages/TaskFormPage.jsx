@@ -50,15 +50,15 @@ function TaskFormPage() {
                 </h1>
                 <form onSubmit={onSubmit}>
                     <label htmlFor="title" className="text-white">Titulo</label>
-                    <input type="text" placeholder="Titulo" {...register("title")}
+                    <input id="title" type="text" placeholder="Titulo" {...register("title")}
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2" autoFocus />
 
                     <label htmlFor="description" className="text-white">Descripcion</label>
-                    <textarea rows="3" placeholder="Descripcion" {...register("description")}
+                    <textarea id="description" rows="3" placeholder="Descripcion" {...register("description")}
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></textarea>
 
                     <label htmlFor="date" className="text-white">Fecha</label>
-                    <input type="date" {...register("date")}
+                    <input id="date" type="date" {...register("date")}
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2" />
 
                     <button className="bg-blue-800 px-4 py-1 rounded-sm text-white">Guardar</button>
