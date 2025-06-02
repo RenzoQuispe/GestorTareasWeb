@@ -7,7 +7,7 @@ function TasksPage(){
         getTasks()
     },[])
 
-    if(tasks.length==0) return (<h1>No hay tareas :c</h1>)
+    if(tasks.length==0) return (<h1 className="text-white min-h-[500px]">No hay tareas :c</h1>)
     
         return (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2">

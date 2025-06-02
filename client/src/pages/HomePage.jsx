@@ -1,6 +1,6 @@
 function HomePage(){
     return (
-        <div>HomePage</div>
+        <div className="min-h-[500px] text-white">Gestor de Tareas</div>
     )
 }
 export default HomePage;
