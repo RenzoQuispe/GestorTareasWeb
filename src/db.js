@@ -16,9 +16,9 @@ export const connectDB = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-        console.log("✅ Conectado a CosmosDB");
+        console.log("Conectado a CosmosDB");
     } catch (error) {
-        console.error("❌ Error al conectar a CosmosDB:", error);
+        console.error("Error al conectar a CosmosDB:", error);
     }
 };
 */
