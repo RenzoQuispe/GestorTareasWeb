@@ -1,6 +1,6 @@
 import axios from './axios';
 
-const API = 'http://localhost:4000/api'
+const API = 'http://localhost:5001/api'
 
 export const registerRequest = user => axios.post(`/register`, user); // Se crea una peticion con el user dado en el frontend
 
