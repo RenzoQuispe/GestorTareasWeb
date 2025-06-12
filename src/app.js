@@ -4,6 +4,7 @@ import authRoutes from './routes/auth.routes.js';
 import tasksRoutes from './routes/tasks.routes.js';
 import cookieParser from 'cookie-parser';
 import cors from "cors";
+import { pool } from './db.js';
 
 const app = express(); // Crear el servidor
 

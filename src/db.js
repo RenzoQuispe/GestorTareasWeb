@@ -1,14 +1,20 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
 dotenv.config();
 
-export const connectDB = async () => {
+export const pool = mysql.createPool({
+    host: 'localhost',
+    user: process.env.DB_USER,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+});
+
+
+export const testDBConexion = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        }).then(() => console.log('Conectado a la base de datos :D')).catch(err => console.error('Error de conexión:', err));
+        const [rows] = await pool.query("SELECT NOW() AS now");
+        console.log("Conexion exitosa a la base de datos :D", rows[0].now);
     } catch (error) {
-        console.log(error);
+        console.error("Error al conectar con la base de datos:", error);
     }
-}
+};
