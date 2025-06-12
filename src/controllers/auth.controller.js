@@ -1,118 +1,109 @@
-
-import User from "../models/user.model.js";
-import bcrypt from 'bcryptjs'
-import { createAccessToken } from "../libs/jwt.js";
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import dotenv from "dotenv";
+import { createAccessToken } from '../libs/jwt.js';
+import { pool } from '../db.js';
+import dotenv from 'dotenv';
 dotenv.config();
 
+// REGISTER
 export const register = async (req, res) => {
-    console.log(req.body); // datos que el cliente envia por lo general en formato json
-    const { email, password, username } = req.body; // traer la info necesario para del json
+    const { email, password, username } = req.body;
+
     try {
+        const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (users.length > 0) return res.status(400).json(['El email ya está en uso']);
 
-        const userFound = await User.findOne({ email });
-        if (userFound) return res.status(400).json(["El email ya esta en uso"]);
+        const passwordHash = await bcrypt.hash(password, 10);
+        const [result] = await pool.query(
+            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+            [username, email, passwordHash]
+        );
 
-        const passwordHash = await bcrypt.hash(password, 10); // encripta la contraseña con un algoritmo usado 10 veces
-        // creating the user
-        const newUser = new User({
+        const token = await createAccessToken({ id: result.insertId });
+
+        res.cookie('token', token);
+
+        res.json({
+            id: result.insertId,
             username,
             email,
-            password: passwordHash,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         });
-        // Guardar usuario
-        const userSaved = await newUser.save();
-
-        //crear token
-        const token = await createAccessToken({ id: userSaved._id });
-
-        res.cookie('token', token); // mandarlo atraves de una cookie
-
-        res.json({
-            id: userSaved._id,
-            username: userSaved.username,
-            email: userSaved.email,
-            createdAt: userSaved.createdAt,
-            updatedAt: userSaved.updatedAt,
-        });
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
 
-}
-
+// LOGIN
 export const login = async (req, res) => {
-    console.log(req.body); // datos que el cliente envia por lo general en formato json
-    const { email, password } = req.body; // traer la info necesario para del json
+    const { email, password } = req.body;
+
     try {
+        const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        const user = users[0];
+        if (!user) return res.status(400).json({ message: 'Usuario no encontrado' });
 
-        const userFound = await User.findOne({ email }); //Busca si el email de la peticion existe en la bd
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ message: 'Contraseña incorrecta' });
 
-        if (!userFound) return res.status(400).json({ message: "Usuario No encontrado" });
+        const token = await createAccessToken({ id: user.id });
 
-        const isMatch = await bcrypt.compare(password, userFound.password); // true or false
-
-        if (!isMatch) return res.status(400).json({ message: "Constraseña incorrecta" });
-
-        //crear token
-        const token = await createAccessToken({ id: userFound._id });
-
-        res.cookie('token', token); // mandarlo atraves de una cookie
+        res.cookie('token', token);
 
         res.json({
-            id: userFound._id,
-            username: userFound.username,
-            email: userFound.email,
-            createdAt: userFound.createdAt,
-            updatedAt: userFound.updatedAt,
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            createdAt: user.created_at,
+            updatedAt: user.updated_at,
         });
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
 
-}
-
-export const logout = async (req, res) => {
-    res.cookie('token', "", {
-        expires: new Date(0)
-    });
-    console.log('logout')
+// LOGOUT
+export const logout = (req, res) => {
+    res.cookie('token', '', { expires: new Date(0) });
     return res.sendStatus(200);
-}
+};
 
+// PROFILE
 export const profile = async (req, res) => {
+    try {
+        const [users] = await pool.query('SELECT * FROM users WHERE id = ?', [req.user.id]);
+        const user = users[0];
+        if (!user) return res.status(400).json({ message: 'Usuario no encontrado :c' });
 
-    const userFound = await User.findById(req.user.id);
+        res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            createdAt: user.created_at,
+            updatedAt: user.updated_at,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-    if (!userFound) return res.status(400).json({ message: "Usuario no encontrado :c" });
-
-    return res.json({
-        id: userFound._id,
-        username: userFound.username,
-        email: userFound.email,
-        createdAt: userFound.createdAt,
-        updatedAt: userFound.updatedAt,
-    });
-
-}
-
+// VERIFY TOKEN
 export const verifyToken = async (req, res) => {
     const { token } = req.cookies;
-    if (!token) return res.status(401).json({message:"No autorizado"});
-  
+    if (!token) return res.status(401).json({ message: 'No autorizado' });
+
     jwt.verify(token, process.env.JWT_SECRET, async (error, user) => {
-      if (error) return res.status(401).json({message:"No autorizado"});
-  
-      const userFound = await User.findById(user.id);
-      if (!userFound) return res.status(401).json({message:"No autorizado"});
-  
-      return res.json({
-        id: userFound._id,
-        username: userFound.username,
-        email: userFound.email,
-      });
+        if (error) return res.status(401).json({ message: 'No autorizado' });
+
+        const [users] = await pool.query('SELECT * FROM users WHERE id = ?', [user.id]);
+        const userFound = users[0];
+        if (!userFound) return res.status(401).json({ message: 'No autorizado' });
+
+        return res.json({
+            id: userFound.id,
+            username: userFound.username,
+            email: userFound.email,
+        });
     });
-  };
+};
