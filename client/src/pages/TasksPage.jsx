@@ -12,7 +12,7 @@ function TasksPage(){
         return (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2">
             {tasks.map((task) => (
-                <TaskCard task={task} key={task._id}/>
+                <TaskCard task={task} key={task.id}/>
             ) )}
         </div>
     )

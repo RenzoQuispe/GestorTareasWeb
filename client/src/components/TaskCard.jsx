@@ -13,10 +13,10 @@ function TaskCard({ task }) {
             <p className="text-slate-400">{task.description}</p>
             <p className="text-white">{days(task.date).utc().format("DD/MM/YYYY")}</p>
             <div className="flex gap-x-35 items-center">
-                <Link className="bg-blue-800 text-white px-1 py-1" to={`/tasks/${task._id}`}>
+                <Link className="bg-blue-800 text-white px-1 py-1" to={`/tasks/${task.id}`}>
                     Editar
                 </Link>
-                <button className="bg-red-800 text-white px-1 py-1" onClick={()=>{deleteTask(task._id)}}>
+                <button className="bg-red-800 text-white px-1 py-1" onClick={()=>{deleteTask(task.id)}}>
                     Eliminar
                 </button>
 
