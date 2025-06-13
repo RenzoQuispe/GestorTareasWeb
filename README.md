@@ -5,20 +5,21 @@
 ```
 npm
 nodejs
-mongod mongosh
+mysql-server
 ```
-
+s
 - setup .env
 ```
-MONGODB_URI=
 PORT=
 JWT_SECRET=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
 ```
-Puedes usar: MONGODB_URI=mongodb://localhost:27017/gestor_tareas_db
 #### Instalacion
 ```
-git clone https://github.com/RenzoQuispe/GestorTareas.git
-cd GestorTareas
+git clone https://github.com/RenzoQuispe/GestorTareasWeb.git
+cd GestorTareasWeb
 npm install
 cd client
 npm install
