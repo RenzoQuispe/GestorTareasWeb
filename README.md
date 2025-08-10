@@ -1,10 +1,19 @@
 # Gestor de Tareas Simple
 
-Aplicación web Gestor de Tareas Simple usando React, Node.js-Express y MongoDB.
+Aplicación web para gestionar tareas, desarrollada con React, Node.js con Express y MongoDB.
 
-## Inicio rápido con Docker
+- - -
 
-### Configurar el archivo `.env`de ejemplo
+### Requisitos Previos
+
+- Docker y Docker Compose instalados.
+- Acceso a tu dirección IP local para configuración de red
+
+- - -
+
+### Inicio rápido con Docker
+
+#### Configurar el archivo `.env` de ejemplo
 ```
 MONGO_DB_NAME=gestortareas
 MONGO_USER=admingestortareas
@@ -17,11 +26,11 @@ NODE_PORT=3000
 
 JWT_SECRET=jwtsecreto123456789
 
-HOST_IP=192.168.1.16       // ¡MODIFICAR!
+HOST_IP=192.168.1.16       # ¡MODIFICAR!
 VITE_API_URL=http://${HOST_IP}:${NODE_PORT}
 ```
 
-### Levantar los contenedor y acceder a la aplicación web
+#### Levantar los contenedor y acceder a la aplicación web
 ```
 docker compose up --build
 ```
