@@ -1,9 +1,9 @@
 import app from './app.js'
 import { connectDB } from './db.js'
-import { PORT } from './config/env.js'
+import { NODE_PORT } from './config/env.js'
 
 connectDB();
 
-app.listen(PORT)
+app.listen(NODE_PORT)
 
-console.log('Server en puerto',PORT)
+console.log('Server en puerto',NODE_PORT)

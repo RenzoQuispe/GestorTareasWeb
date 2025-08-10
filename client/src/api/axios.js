@@ -1,7 +1,6 @@
-// Creamos axios.js que sera un axios configurado-personalizado que usaremos auth.js
 import axios from "axios";
 const instance = axios.create({
-    baseURL: 'http://localhost:5001/api',
-    withCredentials: true // necesario para mantener las credenciales
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: true
 })
 export default instance;

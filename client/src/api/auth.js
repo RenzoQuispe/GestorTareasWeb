@@ -1,8 +1,8 @@
 import axios from './axios';
 
-const API = 'http://localhost:5001/api'
+const API = import.meta.env.VITE_API_URL;
 
-export const registerRequest = user => axios.post(`/register`, user); // Se crea una peticion con el user dado en el frontend
+export const registerRequest = user => axios.post(`/register`, user);
 
 export const loginRequest = user => axios.post(`/login`, user);
 
