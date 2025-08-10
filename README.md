@@ -1,32 +1,38 @@
-### Gestor de Tareas Simple
-![](imagenes/web_tareas.PNG)
-![](imagenes/web_registro_logeo.PNG)
-#### Requerimientos
+# Gestor de Tareas Simple
+
+Aplicación web Gestor de Tareas Simple usando React, Node.js-Express y MongoDB.
+
+## Inicio rápido con Docker
+
+### Configurar el archivo `.env`de ejemplo
 ```
-npm
-nodejs
-mongod mongosh
+MONGO_DB_NAME=gestortareas
+MONGO_USER=admingestortareas
+MONGO_PASS=admin123456789
+MONGO_HOST=mongo
+MONGO_PORT=27017
+MONGO_URI=mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB_NAME}?authSource=admin
+
+NODE_PORT=3000
+
+JWT_SECRET=jwtsecreto123456789
+
+HOST_IP=192.168.1.16       // ¡MODIFICAR!
+VITE_API_URL=http://${HOST_IP}:${NODE_PORT}
 ```
 
-- setup .env
+### Levantar los contenedor y acceder a la aplicación web
 ```
-MONGODB_URI=
-PORT=
-JWT_SECRET=
+docker compose up --build
 ```
-Puedes usar: MONGODB_URI=mongodb://localhost:27017/gestor_tareas_db
-#### Instalacion
-```
-git clone https://github.com/RenzoQuispe/GestorTareas.git
-cd GestorTareas
-npm install
-cd client
-npm install
-npm run dev
-cd ..
-npm run dev
-```
-Entonces:
-```
-WebApp en:   http://localhost:5173/
-```
+Accede a la aplicación web desde cualquier dispositivo en tu red local usando: `http://HOST_IP:5173` (En el ejemplo: `http://192.168.1.16:5173`)
+
+<p align="center"> 
+    <img src="docs/img/web_tareas.png" width="800" />
+</p>
+<p align="center"> 
+    <img src="docs/img/web_registrarse.png" width="800" alt="Página de registro" />
+</p>
+<p align="center"> 
+    <img src="docs/img/web_login.png" width="800" />
+</p>
