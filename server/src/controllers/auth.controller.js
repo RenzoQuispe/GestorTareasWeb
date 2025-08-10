@@ -3,8 +3,7 @@ import User from "../models/user.model.js";
 import bcrypt from 'bcryptjs'
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from 'jsonwebtoken';
-import dotenv from "dotenv";
-dotenv.config();
+import {JWT_SECRET} from '../config/env.js';
 
 export const register = async (req, res) => {
     console.log(req.body); // datos que el cliente envia por lo general en formato json
@@ -103,7 +102,7 @@ export const verifyToken = async (req, res) => {
     const { token } = req.cookies;
     if (!token) return res.status(401).json({message:"No autorizado"});
   
-    jwt.verify(token, process.env.JWT_SECRET, async (error, user) => {
+    jwt.verify(token, JWT_SECRET, async (error, user) => {
       if (error) return res.status(401).json({message:"No autorizado"});
   
       const userFound = await User.findById(user.id);

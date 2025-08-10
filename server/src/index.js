@@ -1,10 +1,9 @@
 import app from './app.js'
 import { connectDB } from './db.js'
-import dotenv from "dotenv";
-dotenv.config();
+import { PORT } from './config/env.js'
 
 connectDB();
 
-app.listen(process.env.PORT) // El servidor escucha en el puerto 3000
+app.listen(PORT)
 
-console.log('Server en puerto',process.env.PORT)
+console.log('Server en puerto',PORT)
