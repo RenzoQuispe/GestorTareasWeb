@@ -7,15 +7,24 @@ import cors from "cors";
 
 const app = express(); // Crear el servidor
 
-app.use(cors({
-    origin: 'http://localhost:5173', //permitir como origen solo el 5173
-    credentials: true   //permitir "mantener" las credenciales
-})); // permitir la conexion entre diferentes dominios en este servidor
-app.use(morgan('dev')); // Para ver peticiones que llegan al backend
+// CORS para red local
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (origin.startsWith("http://localhost:5173")) return callback(null, true);
+        const regexRedLocal = /^http:\/\/192\.168\.1\.\d{1,3}:5173$/;
+        if (regexRedLocal.test(origin)) return callback(null, true);
+        return callback(new Error("CORS no permitido desde este origen: " + origin));
+    },
+    credentials: true
+};
+app.use(cors(corsOptions));
+
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api",authRoutes);
-app.use("/api",tasksRoutes);
+app.use("/", authRoutes);
+app.use("/", tasksRoutes);
 
 export default app;
